@@ -5,7 +5,10 @@ from django.forms.widgets import (Widget, Media, TextInput,
                                   MultiWidget, HiddenInput)
 from django.utils.safestring import mark_safe
 from django.core.validators import EMPTY_VALUES
-from django.forms.util import flatatt
+if (django.get_version() < '1.8'):
+    from django.forms.util import flatatt
+else:
+    from django.forms.util import flatatt
 
 
 class Html5SplitDateTimeWidget(SplitDateTimeWidget):
@@ -25,13 +28,13 @@ class BaseContainerWidget(Widget):
         self.data_widget = data_widget
         self.data_widget.is_localized = self.is_localized
         super(BaseContainerWidget, self).__init__(attrs)
-        
+
     def id_for_label(self, id_):
         # See the comment for RadioSelect.id_for_label()
         if id_:
             id_ += '_0'
         return id_
-        
+
     def format_output(self, rendered_widgets):
         """
         Given a list of rendered widgets (as strings), returns a Unicode string
@@ -51,7 +54,7 @@ class BaseContainerWidget(Widget):
         media = media + self.data_widget.media
         return media
     media = property(_get_media)
-    
+
     def __deepcopy__(self, memo):
         obj = super(BaseContainerWidget, self).__deepcopy__(memo)
         obj.data_widget = copy.deepcopy(self.data_widget)
@@ -64,7 +67,7 @@ class ListWidget(BaseContainerWidget):
             raise TypeError(
                 "Value supplied for %s must be a list or tuple." % name
             )
-                
+
         output = []
         value = [] if value is None else value
         final_attrs = self.build_attrs(attrs)
@@ -103,12 +106,12 @@ class MapWidget(BaseContainerWidget):
     def render(self, name, value, attrs=None):
         if value is not None and not isinstance(value, dict):
             raise TypeError("Value supplied for %s must be a dict." % name)
-                
+
         output = []
         final_attrs = self.build_attrs(attrs)
         id_ = final_attrs.get('id', None)
         fieldset_attr = {}
-        
+
         # in Python 3.X dict.items() returns dynamic *view objects*
         value = list(value.items())
         value.append(('', ''))
@@ -120,13 +123,13 @@ class MapWidget(BaseContainerWidget):
             group = []
             if not self.is_hidden:
                 group.append(mark_safe('<fieldset %s>' % flatatt(fieldset_attr)))
-            
+
             if id_:
                 final_attrs = dict(final_attrs, id='%s_key_%s' % (id_, i))
             group.append(self.key_widget.render(
                 name + '_key_%s' % i, key, final_attrs)
             )
-            
+
             if id_:
                 final_attrs = dict(final_attrs, id='%s_value_%s' % (id_, i))
             group.append(self.data_widget.render(
@@ -134,7 +137,7 @@ class MapWidget(BaseContainerWidget):
             )
             if not self.is_hidden:
                 group.append(mark_safe('</fieldset>'))
-            
+
             output.append(mark_safe(''.join(group)))
         return mark_safe(self.format_output(output))
 
@@ -168,10 +171,10 @@ class MapWidget(BaseContainerWidget):
         obj.key_widget = copy.deepcopy(self.key_widget)
         return obj
 
-        
+
 class HiddenMapWidget(MapWidget):
     is_hidden = True
-    
+
     def __init__(self, attrs=None):
         data_widget = HiddenInput()
         super(MapWidget, self).__init__(data_widget, attrs)
