@@ -1,3 +1,4 @@
+import django
 import os
 import itertools
 from collections import Callable, OrderedDict

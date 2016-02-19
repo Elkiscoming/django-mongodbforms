@@ -5,6 +5,7 @@ Based on django mongotools (https://github.com/wpjunior/django-mongotools) by
 Wilson Júnior (wilsonpjunior@gmail.com).
 """
 import copy
+import django
 
 from django import forms
 from django.core.validators import (EMPTY_VALUES, MinLengthValidator,

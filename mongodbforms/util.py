@@ -13,7 +13,12 @@ except ImportError:
     # pass on this. So we do define it here for now.
     import sys
     from django.core.exceptions import ImproperlyConfigured
-    from django.utils.importlib import import_module
+    try:
+        # Django versions >= 1.9
+        from django.utils.module_loading import import_module
+    except ImportError:
+        # Django versions < 1.9
+        from django.utils.importlib import import_module
     from django.utils import six
 
     def import_by_path(dotted_path, error_prefix=''):

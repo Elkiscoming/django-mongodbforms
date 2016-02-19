@@ -1,4 +1,5 @@
 import copy
+import django
 
 from django.forms.widgets import (Widget, Media, TextInput,
                                   SplitDateTimeWidget, DateInput, TimeInput,
@@ -8,7 +9,7 @@ from django.core.validators import EMPTY_VALUES
 if (django.get_version() < '1.8'):
     from django.forms.util import flatatt
 else:
-    from django.forms.util import flatatt
+    from django.forms.utils import flatatt
 
 
 class Html5SplitDateTimeWidget(SplitDateTimeWidget):
