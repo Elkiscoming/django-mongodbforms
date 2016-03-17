@@ -266,7 +266,7 @@ class ListField(forms.Field):
         self.run_validators(clean_data)
         return clean_data
 
-    def _has_changed(self, initial, data):
+    def has_changed(self, initial, data):
         if initial is None:
             initial = ['' for x in range(0, len(data))]
 
@@ -393,7 +393,7 @@ class MapField(forms.Field):
         self.run_validators(clean_data)
         return clean_data
 
-    def _has_changed(self, initial, data):
+    def has_changed(self, initial, data):
         for k, v in data.items():
             if initial is None:
                 init_val = ''
