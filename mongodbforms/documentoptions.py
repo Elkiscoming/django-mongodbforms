@@ -97,7 +97,7 @@ class DocumentMetaWrapper(MutableMapping):
     as compatible as possible to django's meta class on models.
     """
     # attributes Django deprecated. Not really sure when to remove them
-    _deprecated_attrs = {'module_name': 'model_name'}
+    _deprecated_attrs = {'module_name': 'model_name', 'app_config': 'index_opts'}
 
     pk = None
     pk_name = None
